@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<link rel="stylesheet" type="text/css" href="css/global.css" th:href="@{/css/global.css}" />
+		<title>Exam Manager</title>
+	</head>
+	<body>
+		<div th:replace="/WEB-INF/infoPane :: header"> </div>
+		
+		<div class="home-title">Welcome to the exam dates page, <b><span th:text="${session.currentUser.name}"></span> <span th:text="${session.currentUser.surname}"></span></b></div>
+		
+		<div class="home-div">
+			<div class="gossamer-div">
+				<div class="courses-title">Here there are the exam dates for the course <b><span th:text="${courseName}"></span></b>:</div>
+				<div th:remove="all-but-first">
+					<div class="card card-blue" th:each="obj : ${examDatesAndCount}" th:classappend="${objStat.even} ? 'even'">
+						<div class="card-title">Exam Date: <span th:text="${obj[0]}"></span></div>
+						<div class="card-data">Number of student registered: <span th:text="${obj[1]}"></span></div>
+						<a class="btn btn-gossamer btn-small btn-primary" th:href="@{/GoToExamRegistrations(courseName=${courseName}, examDate=${obj[0]}, column='id', order='ASC')}">Open</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

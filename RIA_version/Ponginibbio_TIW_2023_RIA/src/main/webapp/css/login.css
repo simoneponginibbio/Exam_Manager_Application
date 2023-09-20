@@ -1,0 +1,32 @@
+body{
+    text-align: center;
+}
+
+.container{
+    flex-direction: column;
+}
+
+.login-div,.register-div{
+    width: 50%;
+}
+
+.login-title,.register-title{
+    font-weight: 500;
+    font-size: 1.2rem;
+    line-height: 2rem;
+    margin-bottom: 1rem;
+}
+
+.register-div{
+    display: none;
+}
+
+.student-register-form, .professor-register-form{
+	margin-bottom: 20px;
+}
+
+.warning-message{
+    color: #e74a3b;
+    display: none;
+    margin-top: 1rem;
+}

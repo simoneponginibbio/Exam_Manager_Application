@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<link rel="stylesheet" type="text/css" href="css/global.css" th:href="@{/css/global.css}" />
+		<title>Exam Manager</title>
+	</head>
+	<body>
+		<div th:replace="/WEB-INF/infoPane :: header"> </div>
+		
+		<div class="home-title">Welcome to the exam outcome page, <b><span th:text="${session.currentUser.name}"></span> <span th:text="${session.currentUser.surname}"></span></b></div>
+		
+		<div class="home-div">
+			<div class="gossamer-div">
+				<div class="card card-blue" th:if="${registration.judgment=='uninsered' || registration.judgment=='insered'}">
+					<div class="card-title">
+						 <h2>Grade not yet defined.</h2>
+					</div>
+				</div>
+				<div class="card card-blue" th:if="${registration.judgment=='declined'}">
+					<div class="card-title">
+						<b>Personal Id: </b><span th:text="${registration.student.id}"></span><br>
+						<b>Name: </b><span th:text="${registration.student.name}"></span><br>
+						<b>Surname: </b><span th:text="${registration.student.surname}"></span><br>
+						<b>Email: </b><span th:text="${registration.student.email}"></span><br>
+						<b>Degree Course: </b><span th:text="${registration.student.degree_course}"></span><br>
+						<b>Course Name: </b><span th:text="${registration.exam.course.name}"></span><br>
+						<b>Exam Date: </b><span th:text="${registration.exam.date}"></span><br>
+						<h2>The grade was declined.</h2>
+					</div>
+				</div>
+				<div class="card card-blue" th:if="${registration.judgment=='published' || registration.judgment=='verbalised'}">
+					<div class="card-title" style="padding-bottom:20px">
+						<b>Personal id: </b><span th:text="${registration.student.id}"></span><br>
+						<b>Name: </b><span th:text="${registration.student.name}"></span><br>
+						<b>Surname: </b><span th:text="${registration.student.surname}"></span><br>
+						<b>Email: </b><span th:text="${registration.student.email}"></span><br>
+						<b>Degree Course: </b><span th:text="${registration.student.degree_course}"></span><br>
+						<b>Course Name: </b><span th:text="${registration.exam.course.name}"></span><br>
+						<b>Exam Date: </b><span th:text="${registration.exam.date}"></span><br>
+						<b>Grade: </b><span th:text="${registration.grade}"></span><br>
+						<h2><span th:if="${registration.judgment=='verbalised'}">
+							The grade was verbalised.
+						</span></h2>
+						<span th:if="${declinable}">
+							<a class="btn btn-gossamer btn-medium btn-primary" th:href="@{/GoToDeclineGrade(courseName=${courseName}, examDate=${examDate})}">Decline Grade</a>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

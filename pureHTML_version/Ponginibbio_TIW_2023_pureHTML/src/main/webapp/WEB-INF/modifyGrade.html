@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<link rel="stylesheet" type="text/css" href="css/global.css" th:href="@{/css/global.css}" />
+		<title>Exam Manager</title>
+	</head>
+	<body>
+		<div th:replace="/WEB-INF/infoPane :: header"> </div>
+		
+		<div class="home-title">Welcome to the grade modifier page, <b><span th:text="${session.currentUser.name}"></span> <span th:text="${session.currentUser.surname}"></span></b></div>
+		
+		<div class="home-div">
+			<div class="gossamer-div">
+				<div class="courses-title">Here there are the student information for the exam <b><span th:text="${courseName}"></span></b> of <b><span th:text="${examDate}"></span></b>:</div>
+				<div class="card card-blue">
+					<div class="card-title">
+						<b>Personal Id: </b><span th:text="${registration.student.id}"></span><br>
+						<b>Name: </b><span th:text="${registration.student.name}"></span><br>
+						<b>Surname: </b><span th:text="${registration.student.surname}"></span><br>
+						<b>Email: </b><span th:text="${registration.student.email}"></span><br>
+						<b>Degree Course: </b><span th:text="${registration.student.degree_course}"></span><br>
+						<b>Grade: </b><span th:text="${registration.grade}"></span><br>
+					</div>
+					<form class="login-form" method="POST" th:action="@{/GoToInsertGrade(studentId=${registration.student.id}, courseName=${courseName}, examDate=${examDate})}">
+						<div class="form-group" style="margin-top:20px">
+							<label for="text">New Grade:</label>
+							<input type="text" placeholder="Enter the new grade" name="newGrade" required>
+						</div>
+						<button class="btn btn-large btn-gossamer" type="submit">Modify Grade</button>
+					</form>
+					<div class="warning-message" th:if="${warning}">
+						<span th:text="${warning}"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

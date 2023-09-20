@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<link rel="stylesheet" type="text/css" href="css/global.css" th:href="@{/css/global.css}" />
+		<title>Exam Manager</title>
+	</head>
+	<body>
+		<div th:replace="/WEB-INF/infoPane :: header"> </div>
+		
+		<div class="home-title">Welcome to the exam registrations page, <b><span th:text="${session.currentUser.name}"></span> <span th:text="${session.currentUser.surname}"></span></b></div>
+		
+		<div class="home-div">
+			<div class="gossamer-div">
+				<div class="courses-title">Here there are the students registered for the exam <b><span th:text="${courseName}"></span></b> of <b><span th:text="${examDate}"></span></b>:</div>
+				<table>
+					<thead>
+						<tr>
+							<th>
+								<div class="card-title">
+									<span th:if="${column=='id' && order=='ASC'}">
+										<a th:href="@{/GoToExamRegistrations(courseName=${courseName}, examDate=${examDate}, column='id', order='DESC')}">
+										<b>Id &#8593;</b></a>
+									</span>
+									<span th:if="${(column=='id' && order=='DESC') || column!='id'}">
+										<a th:href="@{/GoToExamRegistrations(courseName=${courseName}, examDate=${examDate}, column='id', order='ASC')}">
+										<b>Id<span th:if="${column=='id'}"> &#8595;</span></b></a>
+									</span>
+								</div>
+							</th>
+							<th>
+								<div class="card-title">
+									<span th:if="${column=='surname' && order=='ASC'}">
+										<a th:href="@{/GoToExamRegistrations(courseName=${courseName}, examDate=${examDate}, column='surname', order='DESC')}">
+										<b>Surname and Name<span> &#8593;</span></b></a>
+									</span>
+									<span th:if="${(column=='surname' && order=='DESC') || column!='surname'}">
+										<a th:href="@{/GoToExamRegistrations(courseName=${courseName}, examDate=${examDate}, column='surname', order='ASC')}">
+										<b>Surname and Name<span th:if="${column=='surname'}"> &#8595;</span></b></a>
+									</span>
+								</div>
+							</th>
+							<th>
+								<div class="card-title">
+									<span th:if="${column=='email' && order=='ASC'}">
+										<a th:href="@{/GoToExamRegistrations(courseName=${courseName}, examDate=${examDate}, column='email', order='DESC')}">
+										<b>Email<span> &#8593;</span></b></a>
+									</span>
+									<span th:if="${(column=='email' && order=='DESC') || column!='email'}">
+										<a th:href="@{/GoToExamRegistrations(courseName=${courseName}, examDate=${examDate}, column='email', order='ASC')}">
+										<b>Email<span th:if="${column=='email'}"> &#8595;</span></b></a>
+									</span>
+								</div>
+							</th>
+							<th>
+								<div class="card-title">
+									<span th:if="${column=='degree_course' && order=='ASC'}">
+										<a th:href="@{/GoToExamRegistrations(courseName=${courseName}, examDate=${examDate}, column='degree_course', order='DESC')}">
+										<b>Degree Course<span> &#8593;</span></b></a>
+									</span>
+									<span th:if="${(column=='degree_course' && order=='DESC') || column!='degree_course'}">
+										<a th:href="@{/GoToExamRegistrations(courseName=${courseName}, examDate=${examDate}, column='degree_course', order='ASC')}">
+										<b>Degree Course<span th:if="${column=='degree_course'}"> &#8595;</span></b></a>
+									</span>
+								</div>
+							</th>
+							<th>
+								<div class="card-title">
+									<span th:if="${column=='grade' && order=='ASC'}">
+										<a th:href="@{/GoToExamRegistrations(courseName=${courseName}, examDate=${examDate}, column='grade', order='DESC')}">
+										<b>Grade<span> &#8593;</span></b></a>
+									</span>
+									<span th:if="${(column=='grade' && order=='DESC') || column!='grade'}">
+										<a th:href="@{/GoToExamRegistrations(courseName=${courseName}, examDate=${examDate}, column='grade', order='ASC')}">
+										<b>Grade<span th:if="${column=='grade'}"> &#8595;</span></b></a>
+									</span>
+								</div>
+							</th>
+							<th>
+								<div class="card-title">
+									<span th:if="${column=='judgment' && order=='ASC'}">
+										<a th:href="@{/GoToExamRegistrations(courseName=${courseName}, examDate=${examDate}, column='judgment', order='DESC')}">
+										<b>Judgment<span> &#8593;</span></b></a>
+									</span>
+									<span th:if="${(column=='judgment' && order=='DESC') || column!='judgment'}">
+										<a th:href="@{/GoToExamRegistrations(courseName=${courseName}, examDate=${examDate}, column='judgment', order='ASC')}">
+										<b>Judgment<span th:if="${column=='judgment'}"> &#8595;</span></b></a>
+									</span>
+								</div>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="card card-blue" th:each="registration : ${registrations}" th:classappend="${registrationStat.even} ? 'even'">
+							<th><div class="card-title"><span th:text="${registration.student.id}"></span></div></th>
+							<th><div class="card-title"><span th:text="${registration.student.surname}"></span> <span th:text="${registration.student.name}"></span></div></th>
+							<th><div class="card-title"><span th:text="${registration.student.email}"></span></div></th>
+							<th><div class="card-title"><span th:text="${registration.student.degree_course}"></span></div></th>
+							<th><div class="card-title"><span th:text="${registration.grade}"></span></div></th>
+							<th><div class="card-title"><span th:text="${registration.judgment}"></span></div></th>
+							<th th:if="${registration.judgment!='verbalised' && registration.judgment!='declined' && registration.judgment !='published'}">
+								<a class="btn btn-gossamer btn-small btn-primary" th:href="@{/GoToModifyGrade(studentId=${registration.student.id}, courseName=${courseName}, examDate=${examDate})}">Modify</a>
+							</th>
+						</tr>
+					</tbody>
+				</table>
+				<span th:if="${countPublishable>0}">
+					<a class="btn btn-gossamer btn-medium btn-primary register" th:href="@{/GoToPublishGrades(courseName=${courseName}, examDate=${examDate})}">Publish Grades</a>
+				</span>
+				<span th:if="${countVerbalisable>0}">
+					<a class="btn btn-gossamer btn-medium btn-primary register" th:href="@{/GoToVerbaliseGrades(courseName=${courseName}, examDate=${examDate})}">Verbalise Grades</a>
+				</span>
+			</div>
+		</div>
+	</body>
+</html>

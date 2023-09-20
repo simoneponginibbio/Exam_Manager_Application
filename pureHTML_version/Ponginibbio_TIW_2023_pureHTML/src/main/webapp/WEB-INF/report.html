@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<link rel="stylesheet" type="text/css" href="css/global.css" th:href="@{/css/global.css}" />
+		<title>Exam Manager</title>
+	</head>
+	<body>
+		<div th:replace="/WEB-INF/infoPane :: header"> </div>
+		
+		<div class="home-title">Welcome to the exam report page, <b><span th:text="${session.currentUser.name}"></span> <span th:text="${session.currentUser.surname}"></span></b></div>
+		
+		<div class="home-div">
+			<div class="gossamer-div">
+				<div class="courses-title">Here there is the report for the exam <b><span th:text="${courseName}"></span></b> of <b><span th:text="${examDate}"></span></b>:</div>
+				<div class="courses-title">Report Id: <b><span th:text="${report[0][0].report.id}"></span></b>     Timestamp: <b><span th:text="${timestamp}"></span></b></div>
+				<table>
+					<thead>
+						<tr>
+							<th><div class="card-title">Id</div></th>
+							<th><div class="card-title">Surname and Name</div></th>
+							<th><div class="card-title">Email</div></th>
+							<th><div class="card-title">Degree Course</div></th>
+							<th><div class="card-title">Grade</div></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="card card-blue" th:each="r : ${report}" th:classappend="${rStat.even} ? 'even'">
+							<th><div class="card-title"><span th:text="${r[0].student.id}"></span></div></th>
+							<th><div class="card-title"><span th:text="${r[0].student.surname}"></span> <span th:text="${r[0].student.name}"></span></div></th>
+							<th><div class="card-title"><span th:text="${r[0].student.email}"></span></div></th>
+							<th><div class="card-title"><span th:text="${r[0].student.degree_course}"></span></div></th>
+							<th><div class="card-title"><span th:text="${r[1]}"></span></div></th>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</body>
+</html>

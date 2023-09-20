@@ -1,0 +1,174 @@
+package it.polimi.tiw.exams.controllers;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import it.polimi.tiw.exams.beans.User;
+import it.polimi.tiw.exams.dao.StudentDAO;
+import it.polimi.tiw.exams.dao.UserDAO;
+import it.polimi.tiw.exams.utils.ConnectionHandler;
+
+/**
+ * Servlet implementation class RegisterStudent
+ */
+@WebServlet("/RegisterStudent")
+@MultipartConfig
+public class RegisterStudent extends HttpServlet {
+	
+	private static final long serialVersionUID = 1L;
+	private Connection connection;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public RegisterStudent() {
+    	super();
+    	// TODO Auto-generated constructor stub
+    }
+
+    @Override
+    public void init() throws ServletException {
+    	ServletContext servletContext = getServletContext();
+		this.connection = ConnectionHandler.getConnection(servletContext);
+    }
+    
+    @Override
+    public void destroy() {
+		try {
+			ConnectionHandler.closeConnection(connection);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+    
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doPost(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// Tries to register the student, if the function returns null ends
+		if (registerStudent(request, response) == null) {
+			return;
+		}
+		// Once the student is registered an OK status is set
+		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	/**
+	 * Verifies the input and if it is correct creates the student in the DB. If the operation is successful returns 0, else returns null
+	 * 
+	 * @param request
+	 * @param response
+	 * @return Student
+	 * @throws ServletException
+	 * @throws IOException
+	 */
+	private Integer registerStudent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// Gets the parameters of the request and verifies if they are in the correct format (length and syntax)
+		String name = request.getParameter("name");
+		String surname = request.getParameter("surname");
+		String email = request.getParameter("email");
+		String degree_course = request.getParameter("degree_course");
+		String password = request.getParameter("password");
+		String repeat_pwd = request.getParameter("repeat_pwd");
+		// Verifies if all parameters are not null
+		if (name == null || surname == null || email == null || degree_course == null || password == null || repeat_pwd == null) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);		
+			response.getWriter().println("Register module missing some data");
+			return null;
+		}
+		// Checks if the inserted string (NAME) is of the correct length (1-45)
+		if (name.length() <= 0 || name.length() > 45) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);		
+			response.getWriter().println("Chosen name invalid (a valid name has more than one character and less than 45)!");
+			return null;
+		}
+		// Checks if the inserted string (SURNAME) is of the correct length (1-45)
+		if (surname.length() <= 0 || surname.length() > 45) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);		
+			response.getWriter().println("Chosen surname invalid (a valid surname has more than one character and less than 45)!");
+			return null;
+		}
+		// Checks if the inserted string (EMAIL) matches with an e-mail syntax (RFC5322 e-mail) by using a RegEx
+		String emailRegEx = "^(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])$";
+		// If the string does not match the the user is redirected to the register page with an error message
+		if (!email.matches(emailRegEx)) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);		
+			response.getWriter().println("Chosen email invalid!");
+			return null;
+		}
+		// Checks if the inserted string (DEGREE_COURSE) is of the correct length (1-45)
+		if (degree_course.length() <= 0 || degree_course.length() > 45) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);		
+			response.getWriter().println("Chosen degree course invalid (a valid degree course has more than one character and less than 45)!");
+			return null;
+		}
+		// Checks if the inserted strings (PASSWORD and REPEAT_PWD) are of the correct length (1-45) and equal
+		if (password.length() <= 0 || password.length() > 45) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);		
+			response.getWriter().println("Chosen password invalid (a valid password has more than one character and less than 45)!");
+			return null;
+		}
+		if (!password.equals(repeat_pwd)) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);		
+			response.getWriter().println("Password and repeat password field not equal!");
+			return null;
+		}
+		// Checks that the submitted user for the registration has not the same email of another user in the DB
+		// If another user with the same email is present redirects to the to the RegisterPage with a warning and error message
+		UserDAO userDAO = new UserDAO(connection);
+		User user = null;
+		try {
+			user = userDAO.findUserByEmail(email);
+		} catch (SQLException e) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.getWriter().println(e.getMessage());
+			return null;
+		}
+		if (user != null) {
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.getWriter().println("Chosen email already in use!");
+			return null;
+		}
+		// Creates the submitted student in the DB. If error are generated everything is forwarded to an errorPage
+		StudentDAO studentDAO = new StudentDAO(connection);
+		try {
+			studentDAO.registerStudent(name, surname, email, password, degree_course);
+		} catch (SQLException e) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.getWriter().println(e.getMessage());
+			return null;
+		}
+		// Gets the created user in the DB to verify it has been correctly created in the DB, if an Exception is raised forwards to the ErrorPage
+		try {
+			user = userDAO.findUserByEmail(email);
+		} catch (SQLException e) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.getWriter().println(e.getMessage());
+			return null;
+		}
+		if (user == null) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.getWriter().println("Error: student not correctly created");
+			return null;
+		}
+		return 0;
+	}
+	
+}

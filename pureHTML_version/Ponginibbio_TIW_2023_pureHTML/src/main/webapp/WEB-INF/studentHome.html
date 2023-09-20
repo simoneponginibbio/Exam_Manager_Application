@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<link rel="stylesheet" type="text/css" href="css/global.css" th:href="@{/css/global.css}" />
+		<title>Exam Manager</title>
+	</head>
+	<body>
+		<div th:replace="/WEB-INF/infoPane :: header"> </div>
+		
+		<div class="home-title">Welcome to your home, <b><span th:text="${session.currentUser.name}"></span> <span th:text="${session.currentUser.surname}"></span></b></div>
+		
+		<div class="home-div">
+			<div class="gossamer-div">
+				<div class="courses-title">Here there are your courses:</div>
+				<div class="card card-blue" th:each="course : ${courses}" th:classappend="${courseStat.even} ? 'even'">
+					<div class="card-title">Course Name: <span th:text="${course.name}"></span> </div>
+					<div class="card-data">
+						<div><b>Professor: </b><span th:text="${course.professor.name}"></span> <span th:text="${course.professor.surname}"></span></div>
+					</div>
+					<a class="btn btn-gossamer btn-small btn-primary" th:href="@{/GoToExamDates(courseName=${course.name})}">Open</a>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

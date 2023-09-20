@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+		<link rel="stylesheet" type="text/css" href="css/global.css"/>
+		<link rel="stylesheet" type="text/css" href="css/login.css"/>
+		<script src="js/utils.js" charset="utf-8" defer></script>
+		<script src="js/login.js" charset="utf-8" defer></script>
+		<title>Login page</title>
+	</head>
+	<body>
+		<h1 id="title">Welcome to your exam manager application</h1>
+		
+		<div class="container">
+		
+			<div id="login-div" class="login-div gossamer-div">
+				<div class="login-title">Insert your credentials to Login</div>
+				<form class="login-form" action="#">
+					<div class="form-group">
+						<label for="email">Email</label>
+						<input type="email" placeholder="Enter your email" name="email" required>
+					</div>
+					<div class="form-group">
+						<label for="password">Password</label>
+						<input type="password" placeholder="Enter your password" name="password" required>
+					</div>
+					<input id="login_button" class="btn btn-large btn-gossamer" type="button" value="Login" />
+				</form>
+				<div id="login_warning_id" class="warning-message"></div>
+				<hr>
+				<a id="open_student_register_login_button" class="register-link" href="#">Register</a>
+			</div>
+			
+			<div id="student-register-div" class="register-div gossamer-div">
+				<div class="register-title">Insert data to create a new Student Account</div>
+				<form class="student-register-form" action="#">
+					<div class="form-group">
+						<label for="name">Name</label>
+						<input type="text" placeholder="Enter your name" name="name" required>
+					</div>
+					<div class="form-group">
+						<label for="surname">Surname</label>
+						<input type="text" placeholder="Enter your surname" name="surname" required>
+					</div>
+					<div class="form-group">
+						<label for="email">Email</label>
+						<input type="email" placeholder="Enter your email" name="email" required>
+					</div>
+					<div class="form-group">
+					<label for="degree_course">Degree course</label>
+					<input type="text" placeholder="Enter your degree course" name="degree_course" required>
+				</div>
+					<div class="form-group">
+						<label for="password">Password</label>
+						<input type="password" placeholder="Enter your desired password" name="password" required><br>
+					</div>
+					<div class="form-group">
+						<label for="repeat_pwd">Repeat Password</label>
+						<input type="password" placeholder="Re-enter your password" name="repeat_pwd" required><br>
+					</div>
+					<input id="student_register_button" class="btn btn-large btn-gossamer" type="button" value="Register"/>
+				</form>
+				<div id="student_register_warning_id" class="warning-message"></div>
+				<a id="open_professor_register_button" class="register-link" href="#">Register as a professor</a>
+				<hr>
+				<a id="open_login_student_button" class="register-link" href="#">Login</a>
+			</div>
+			
+			<div id="professor-register-div" class="register-div gossamer-div">
+				<div class="register-title">Insert data to create a new Professor Account</div>
+				<form class="professor-register-form" action="#">
+					<div class="form-group">
+						<label for="name">Name</label>
+						<input type="text" placeholder="Enter your name" name="name" required>
+					</div>
+					<div class="form-group">
+						<label for="surname">Surname</label>
+						<input type="text" placeholder="Enter your surname" name="surname" required>
+					</div>
+					<div class="form-group">
+						<label for="email">Email</label>
+						<input type="email" placeholder="Enter your email" name="email" required>
+					</div>
+					<div class="form-group">
+						<label for="password">Password</label>
+						<input type="password" placeholder="Enter your desired password" name="password" required><br>
+					</div>
+					<div class="form-group">
+						<label for="repeat_pwd">Repeat Password</label>
+						<input type="password" placeholder="Re-enter your password" name="repeat_pwd" required><br>
+					</div>
+					<input id="professor_register_button" class="btn btn-large btn-gossamer" type="button" value="Register"/>
+				</form>
+				<div id="professor_register_warning_id" class="warning-message"></div>
+				<a id="open_student_register_button" class="register-link" href="#">Register as a student</a>
+				<hr>
+				<a id="open_login_button" class="register-link" href="#">Login</a>
+			</div>
+			
+		</div>
+	</body>
+</html>
